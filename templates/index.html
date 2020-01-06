@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="UTF-8">
+  {% include "navbar1.html" %}
+  <div class="jombotron">
+    <div class ="container">
+      <meta http-equiv="refresh" content="10">
+    <h1><br>Water Quality Monitoring System </h1>
+    
+  </div>
+  <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+  
+   <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+  
+  <script src='https://cdn.datatables.net/plug-ins/f2c75b7247b/integration/bootstrap/3/dataTables.bootstrap.js' > </script>
+  <script src='https://cdn.datatables.net/responsive/1.0.4/js/dataTables.responsive.js' > </script>
+  <script src='https://cdn.datatables.net/responsive/1.0.4/js/dataTables.responsive.js' > </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+
+  <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js" ></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+  <link>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
+  <link rel="'stylesheet" href="https://cdn.datatables.net/plug-ins/f2c75b7247b/integration/bootstrap/3/dataTables.bootstrap.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/1.0.4/css/dataTables.responsive.css" />
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" />
+  </div>
+  </div>
+
+  <title> Water Quality Monitoring System</title>
+
+  <style>
+
+    @font-face {
+      font-family: myFirstFont;
+      src: url(sansation_light.woff);
+      }
+
+      * {
+      font-family: myFirstFont;
+      }
+    body{
+      font-size: 175%
+
+
+
+    
+
+    }
+    h1{
+      font-size: 33px;
+      text-align: center;
+      text-decoration: all;
+      padding: 20px 0;
+    }
+
+    h4{
+      color: #1E90FF;
+      text-align: right;
+      font-size: 20px;
+    }
+
+    table caption{
+      padding: .5em 0;
+    }
+    h3{
+      color: green;
+      text-align: left;
+      text-decoration: all;
+      padding-left: 20px 0;
+    }
+
+    table.dataTable th,
+    table.dataTable td {
+      white-space: nowrap;
+    }
+
+    .p{
+      text-align: center;
+      padding-top: 140px ;
+      font-size: 55px;
+    }
+    body{
+      background-image: url("/static/images.jpg");
+      background-repeat: no-repeat;
+      background-size: cover;
+
+    }
+
+    
+    
+
+  </style>
+  </head>
+    <body>
+      
+     
+      
+ 
+      <!--<form action="/aboutus" method='POST'>
+        <div class= "container">
+          <button type="submit" class="btn btn-danger"> About Us </button>
+        </div>
+      </form> -->
+    </br>  
+      
+      <div class="container">
+        <div class="alert alert-info">
+       <strong>Info!</strong> Please Click 'ALL' to show the values of all parameters.
+        </div>
+      </div>
+
+       <div class="container">
+         <h3>Parameters selection </h3> 
+       </div>
+
+      <div class="container">
+        <form action="/selectone" method ='POST'>
+          <label><input type="radio" name="parameters" id="radio" value="allThree"> All</label> <t>
+          <label><input type="radio" name="parameters" id="radio" value="phvalue"> pHvalue </label>
+          <label><input type="radio" name="parameters" id="radio" value="conductivity"> Conductivity </label>
+          <!-- <input type="button" value="Get Value"> -->
+        </form>
+      </div> </br>
+
+
+<script>  
+ $(document).ready(function() {   
+   $('input[name=parameters]').change(function(){  
+        $('form').submit();  
+   });  
+  });  
+</script>  
+    
+
+    
+
+            <div class="container">
+               <div class="row">
+                  <div class="col-xs-10">
+                     <table class="table table-bordered table-striped">
+
+                        <thead>
+                            <tr>
+                              <th>Record Date</th>
+                              <th>PH Value</th>
+                              <th>Conductivity <br> (mS/cm)</th>
+                              <th>Remedies</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           {%  for data in datas %}
+
+                         
+                  
+                    <tr>
+                      
+                              <td>{{ data.record_date }}</td>
+                              <td>{{ data.ph_value }}</td>
+                              <td>{{ data.conductivity }}</td>
+                              <td>{{data.remedy}}</td>
+                           </tr>
+                           {% endfor %}
+
+                        </tbody>
+                        <tfoot>
+                           <p>Water Quality parameters</p>
+                        </tfoot>
+                     </table>
+
+                  
+                  </div>
+               <canvas id="myChart" width="1600" height="900"></canvas>
+               </div>
+            </div>
+         </body>
+
+         <script>
+         var time =[];
+         var ph_values = [];
+         var turbidities=[];
+         var cons=[];
+             {%  for data in datas %}
+                 var dates= new Date('{{ data.record_date }}');
+                 time.push( dates );
+                 ph_values.push({{  data.ph_value}});
+                 turbidities.push({{  data.turbidity}});
+                 cons.push({{ data.conductivity }});
+             {% endfor %}
+            var ctx = document.getElementById("myChart");
+            var myChart = new Chart(ctx, {X
+          type: 'line',
+          data: {
+            labels: time,
+            datasets: [
+              {
+                data: ph_values,
+                  label: "PH values",
+                  borderColor: "#324512",
+                  fill: false
+              },
+                {
+                  data: turbidities,
+                  label: "Turbidities",
+                  borderColor: "#3e95cd",
+                    fill: false
+                },{
+                font-size='20'
+                  },
+                {
+  data: cons,
+  label: "Conductivity",
+  borderColor: "#cd4260",
+  fill: false
+},
+              ]
+
+          }
+        });
+         </script>
+
+</html>

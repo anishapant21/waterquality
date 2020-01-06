@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="UTF-8">
+  {% include "navbar1.html"%}
+  <div class="jombotron">
+    <div class ="container">
+    <h1><br>Water Quality Monitoring System </h1>
+    
+  </div>
+  <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+  
+   <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+  
+  <script src='https://cdn.datatables.net/plug-ins/f2c75b7247b/integration/bootstrap/3/dataTables.bootstrap.js' > </script>
+  <script src='https://cdn.datatables.net/responsive/1.0.4/js/dataTables.responsive.js' > </script>
+  <script src='https://cdn.datatables.net/responsive/1.0.4/js/dataTables.responsive.js' > </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+
+  <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js" ></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+  <link>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
+  <link rel="'stylesheet" href="https://cdn.datatables.net/plug-ins/f2c75b7247b/integration/bootstrap/3/dataTables.bootstrap.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/1.0.4/css/dataTables.responsive.css" />
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" />
+  </div>
+  </div>
+
+  <title> Water Quality Monitoring System</title>
+
+  <style>
+
+    @font-face {
+      font-family: myFirstFont;
+      src: url(sansation_light.woff);
+      }
+
+      * {
+      font-family: myFirstFont;
+      }
+    body{
+      font-size: 150%
+
+    }
+    h1{
+      font-size: 33px;
+      text-align: center;
+      text-decoration: all;
+      padding: 20px 0;
+    }
+
+    h4{
+      color: #1E90FF;
+      text-align: right;
+      font-size: 20px;
+    }
+
+    table caption{
+      padding: .5em 0;
+    }
+    h3{
+      color: green;
+      text-align: left;
+      text-decoration: all;
+      padding-left: 20px 0;
+    }
+
+    table.dataTable th,
+    table.dataTable td {
+      white-space: nowrap;
+    }
+
+    .p{
+      text-align: center;
+      padding-top: 140px ;
+      font-size: 22px;
+    }
+
+    body {
+       background-color: white;
+      
+    }
+
+    *{
+      box-sizing: border-box;
+
+    }
+
+    .column{
+      float: left;
+      width: 20%;
+      padding: 25px;
+      text-align: center;
+      font-size: 15px;
+      cursor: pointer;
+      color: white;
+    }
+
+    .containerTab {
+      padding: 20px;
+      color: black;
+    }
+
+    .row:after{
+      content: "";
+      display : "table";
+      clear:both;
+    }
+
+    .closebtn {
+      float: left;
+      color: red;
+      font-size: 35px;
+      cursor: pointer;
+    }
+    
+    
+
+  </style>
+  </head>
+    <body>
+      
+ 
+      <!-- <form action="/erase" method='POST'>
+        <div class= "container">
+          <button type="submit" class="btn btn-danger"> Erase </button>
+        </div>
+      </form> -->
+    </br>  
+
+      <div class="container">
+        <div class="alert alert-info">
+       <strong>Info!</strong> Please Click 'ALL' to show the values of all parameters.
+        </div>
+      </div>
+
+       <div class="container">
+         <h3>Parameters selection </h3> 
+       </div>
+
+      <div class="container">
+        <form action="/selectone" method ='POST'>
+          <label><input type="radio" name="parameters" id="radio" value="allThree"> All</label> <t>
+          <label><input type="radio" name="parameters" id="radio" value="phvalue"> pHvalue </label>
+          <label><input type="radio" name="parameters" id="radio" value="conductivity"> Conductivity </label>
+          <!-- <input type="button" value="Get Value"> -->
+        </form>
+      </div> </br>
+
+
+<script>  
+ $(document).ready(function() {   
+   $('input[name=parameters]').change(function(){  
+        $('form').submit();  
+   });  
+  });  
+</script>  
+
+
+<div class="row">
+    <div class="container">
+      <div class="column" onclick="openTab('b1');" style="background:#BDB76B;">
+        <i>Conductivity Table</i>
+      </div>
+
+      <div class="column" onclick="openTab('b2')" style="background:#E9967A;">
+        <i>Conductivity Graph</i>
+      </div>
+    </div>
+    </div>
+
+    <div id="b1" class="containerTab">
+    <span onclick="this.parentElement.style.display='none'" class="closebtn"> &times; </span>
+    
+            <div class="container">
+               <div class="row">
+                  <div class="col-xs-8">
+                     <table class="table table-bordered table-striped">
+
+                        <thead>
+                           <tr>
+                              <th>Record Date</th>
+                              <th>Conductivity<br> (mS/cm)</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           {%  for data in datas %}
+                  <tr>
+                              <td>{{ data.record_date }}</td>
+                              <td>{{ data.conductivity }}</td>
+                           </tr>
+                           {% endfor %}
+
+                        </tbody>
+                     </table>
+
+                  </div>
+               </div>
+            </div>
+         </body>
+  </div>
+  <div id="b2" class="containerTab">
+    <span onclick="this.parentElement.style.display='none'" class="closebtn"> &times; </span>
+
+        <div class="container">
+          <div class="row">
+            <div class="col-10">
+              <canvas id="myChart" width="1600" height="900" ></canvas>
+            </div>
+
+               <div class='col-10'>
+               <script>
+               var time =[];
+               var cons=[];
+                   {%  for data in datas %}
+                       var dates= new Date('{{ data.record_date }}');
+                         ram=dates.toLocaleTimeString();
+                         time.push( ram );
+                       cons.push({{ data.conductivity }});
+                   {% endfor %}
+                  var ctx = document.getElementById("myChart");
+                  var myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                  labels: time,
+                  datasets: [
+                      {
+        data: cons,
+        label: "Conductivity",
+        borderColor: "#cd4260",
+        fill: false,
+        pointBackgroundColor:"#cd4260",
+        pointRadius: 5,
+        pointHoverRadius: 5
+
+      },
+
+                    ]
+
+
+
+                },
+                options:{
+                 /* responsive:true,
+                  showLines:false,
+                  display:true,
+                  scales:{
+                    yAxes:[{
+                      scaleLabel:{
+                        display:true,
+                        labelString:"Conductivity(mS/cm)",
+                        fontSize:20,
+
+                      }
+                    }],
+                    xAxes:[{
+                      scaleLabel:{
+                        display:true,
+                        labelString:"Time",
+                        fontSize:20,
+                      }
+                    }]
+
+                    }
+                  
+
+                }
+              });
+                  myChart.options.scales.yAxes[0].ticks.fontSize = 15 ;
+                  mychart.update(); */
+                  responsive:true,
+                    showLines:false,
+                    display:true,
+                    layout:{
+                      //padding whole canvas ko lagi
+                      padding:{
+                        left:0,
+                        right:0,
+                        top:0,
+                        button:0
+                      }
+                    },
+                    scales: {
+                    yAxes: [{
+                    scaleLabel: {
+                      display: true,
+                      labelString: 'Conductivity(mS/cm)',
+                      fontSize:20,
+                      fontColor:'black',
+
+                    },
+                    gridLines: {
+                    display: true ,
+                    color: 'black',
+                  },
+                  }],
+                  xAxes: [{
+                    scaleLabel: {
+                      display: true,
+                      labelString: 'Time',
+                      fontSize:20,
+                      fontColor:'black',
+                      
+                    },
+                    gridLines:{
+                      display:true,
+                      color:'black',
+                    }
+                   
+                  }]
+                }
+                  }
+                });
+                    myChart.options.scales.yAxes[0].ticks.fontSize = 15 ;
+                    
+                    myChart.update();
+
+
+         </script>
+       </div>
+     </div>
+  </div>
+
+  
+
+  <script>
+    function openTab(tabName){
+      var i,x;
+      x=document.getElementsByClassName("containerTab");
+      for(i=0; i<x.length; i++){
+        x[i].style.display="none";
+      }
+      document.getElementById(tabName).style.display="block";
+    }
+  </script>
+
+</html>
